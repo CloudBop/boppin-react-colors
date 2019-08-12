@@ -20,7 +20,7 @@ const styles = {
     }
   },
   copyText: {
-    color: props => (chroma.contrast(props.background, 'black') < 6 ? 'rgba(0,0,0,0.6)' : 'white')
+    color: props => (chroma.contrast(props.background, 'black') > 6 ? 'rgba(0,0,0,0.6)' : 'white')
   },
   colorName: {
     color: props => (chroma.contrast(props.background, 'black') < 6 ? 'white' : 'rgba(0,0,0,0.6)')
