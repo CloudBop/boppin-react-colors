@@ -19,7 +19,7 @@ class App extends Component {
     return (
       <Switch>
         {/* be careful, path `/new` could confused with :id  | has to be above*/}
-        <Route exact path="/palette/new" render={routeProps => <NewPaletteForm />} />
+        <Route exact path="/palette/new" render={() => <NewPaletteForm />} />
 
         <Route exact path="/" render={routeProps => <PaletteList palettes={seedColors} {...routeProps} />} />
 
