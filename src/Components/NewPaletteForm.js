@@ -79,27 +79,54 @@ const useStyles = makeStyles(theme => ({
 export default function NewPaletteForm(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const { savePalette } = props;
+  const { savePalette, palettes } = props;
   const [ open, setOpen ] = React.useState(false);
   const [ curColor, setColor ] = React.useState('teal');
-  const [ colors, setColors ] = React.useState([
-    {
-      color: 'purple',
-      name: 'batpurple'
-    }
-  ]);
+  const [ newPaletteName, setNewPaletteName ] = React.useState('');
+  const [ colors, setColors ] = React.useState([ { color: 'purple', name: 'batpurple' } ]);
   // new color string
   const [ newColorName, setColorName ] = React.useState('');
   // lifecycle methods using hooks // same as componentDidMount
   React.useEffect(
     () => {
+      console.log('curColor: ' + curColor);
+
       // searching array of object with propertiess using destructuring
       ValidatorForm.addValidationRule('isColorNameUnique', value =>
         colors.every(({ name }) => name.toLowerCase() !== value.toLowerCase())
       );
-      ValidatorForm.addValidationRule('isColorUnique', () => colors.every(({ color }) => color !== curColor));
+      ValidatorForm.addValidationRule('isColorUnique', () =>
+        colors.every(({ color }) => {
+          console.log('color: ' + color);
+          return color !== curColor;
+        })
+      );
+      // console.log('testing');
+      // ValidatorForm.addValidationRule('isPaletteNameUnique', () => {
+      //   console.log('fored!');
+      //   console.log(palettes);
+      //   console.log(newPaletteName);
+      //   palettes.every(({ paletteName }) => {
+      //     // console.log(paletteName);
+      //     return paletteName.toLowerCase() !== newPaletteName.toLowerCase();
+      //   });
+      // });
     },
     [ colors ]
+  );
+  React.useEffect(
+    () => {
+      // console.log('testing');
+      ValidatorForm.addValidationRule('isPaletteNameUnique', value => {
+        // console.log('fored! ' + value);
+        // console.log(palettes);
+        return palettes.every(({ paletteName }) => {
+          // console.log(paletteName);
+          return paletteName.toLowerCase() !== value.toLowerCase();
+        });
+      });
+    },
+    [ palettes ]
   );
 
   function handleDrawerOpen() {
@@ -120,11 +147,14 @@ export default function NewPaletteForm(props) {
       name: newColorName
     };
     setColors([ ...colors, newColor ]);
-    setColorName('');
-    setColor('');
+    // updateColor();
   }
   function handleChange(evt) {
     setColorName(evt.target.value);
+  }
+  function handleOnChange(evt) {
+    console.log(evt.target.value);
+    setNewPaletteName(evt.target.value);
   }
   function handleSubmitSavePalette() {
     let paletteName = 'New Test Palette',
@@ -160,9 +190,19 @@ export default function NewPaletteForm(props) {
           <Typography variant="h6" noWrap>
             Persistent drawer
           </Typography>
-          <Button variant="contained" color="primary" onClick={handleSubmitSavePalette}>
-            Save Palette
-          </Button>
+          <ValidatorForm onSubmit={handleSubmitSavePalette}>
+            <TextValidator
+              label="Palette Name"
+              value={newPaletteName}
+              onChange={handleOnChange}
+              name="newPaletteName"
+              validators={[ 'required', 'isPaletteNameUnique' ]}
+              errorMessages={[ 'Enter Palette Name', ' Palette name in use.' ]}
+            />
+            <Button variant="contained" color="primary" type="submit">
+              Save Palette
+            </Button>
+          </ValidatorForm>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -201,6 +241,7 @@ export default function NewPaletteForm(props) {
           <TextValidator
             value={newColorName}
             onChange={handleChange}
+            name="newColorName"
             //
             validators={[ 'required', 'isColorNameUnique', 'isColorUnique' ]}
             errorMessages={[ 'Color Name is required', 'Color name must be unique!', 'Color already used.' ]}
