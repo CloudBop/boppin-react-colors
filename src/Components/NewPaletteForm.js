@@ -14,7 +14,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ChromePicker } from 'react-color';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import DraggableColorBox from './DraggableColorBox';
+import { arrayMove } from 'react-sortable-hoc';
+import DraggableColorList from './DraggableColorList';
 
 const drawerWidth = 400;
 
@@ -94,11 +95,9 @@ export default function NewPaletteForm(props) {
         colors.every(({ name }) => name.toLowerCase() !== value.toLowerCase())
       );
       ValidatorForm.addValidationRule('isColorUnique', newColor => {
-        console.log(colors);
+        // // REMEMBER THIS WAS BROKEN
         return colors.every(({ color }) => {
-          console.log('color: ' + color);
-          console.log('new: ' + newColor);
-          console.log('currents: ' + curColor);
+          // refer to curcolor from array
           return color !== curColor;
         });
       });
@@ -160,11 +159,14 @@ export default function NewPaletteForm(props) {
     });
     props.history.push('/');
   }
-  function onDeleteClick(colorName) {
+  function removeColor(colorName) {
     // alert(colorName);
     const removedData = colors.filter(color => color.name !== colorName);
-    console.log(removedData);
+    // console.log(removedData);
     setColors(removedData);
+  }
+  function onSortEnd({ oldIndex, newIndex }) {
+    setColors(arrayMove(colors, oldIndex, newIndex));
   }
   return (
     <div className={classes.root}>
@@ -276,14 +278,7 @@ export default function NewPaletteForm(props) {
           ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
         </Typography> */}
 
-        {colors.map((color, index) => (
-          <DraggableColorBox
-            key={index}
-            color={color.color}
-            name={color.name}
-            handleClick={() => onDeleteClick(color.name)}
-          />
-        ))}
+        <DraggableColorList colors={colors} removeColor={removeColor} axis={'xy'} onSortEnd={onSortEnd} />
       </main>
     </div>
   );
