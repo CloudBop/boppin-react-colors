@@ -81,38 +81,29 @@ export default function NewPaletteForm(props) {
   const theme = useTheme();
   const { savePalette, palettes } = props;
   const [ open, setOpen ] = React.useState(false);
-  const [ curColor, setColor ] = React.useState('teal');
+  const [ curColor, setCurrentColor ] = React.useState('teal');
   const [ newPaletteName, setNewPaletteName ] = React.useState('');
-  const [ colors, setColors ] = React.useState([ { color: 'purple', name: 'batpurple' } ]);
+  const [ colors, setColors ] = React.useState([ { color: '#654212', name: 'suprise' } ]);
   // new color string
   const [ newColorName, setColorName ] = React.useState('');
   // lifecycle methods using hooks // same as componentDidMount
   React.useEffect(
     () => {
-      console.log('curColor: ' + curColor);
-
       // searching array of object with propertiess using destructuring
       ValidatorForm.addValidationRule('isColorNameUnique', value =>
         colors.every(({ name }) => name.toLowerCase() !== value.toLowerCase())
       );
-      ValidatorForm.addValidationRule('isColorUnique', () =>
-        colors.every(({ color }) => {
+      ValidatorForm.addValidationRule('isColorUnique', newColor => {
+        console.log(colors);
+        return colors.every(({ color }) => {
           console.log('color: ' + color);
+          console.log('new: ' + newColor);
+          console.log('currents: ' + curColor);
           return color !== curColor;
-        })
-      );
-      // console.log('testing');
-      // ValidatorForm.addValidationRule('isPaletteNameUnique', () => {
-      //   console.log('fored!');
-      //   console.log(palettes);
-      //   console.log(newPaletteName);
-      //   palettes.every(({ paletteName }) => {
-      //     // console.log(paletteName);
-      //     return paletteName.toLowerCase() !== newPaletteName.toLowerCase();
-      //   });
-      // });
+        });
+      });
     },
-    [ colors ]
+    [ colors, curColor ]
   );
   React.useEffect(
     () => {
@@ -137,11 +128,13 @@ export default function NewPaletteForm(props) {
     setOpen(false);
   }
 
-  function updateColor(color) {
-    setColor(color.hex);
+  function updateCurrentColor(color) {
+    setCurrentColor(color.hex);
   }
 
-  function addNewColor() {
+  function addNewColor(args) {
+    //console.log(args);
+    console.log('2 curCol: ' + curColor);
     const newColor = {
       color: curColor,
       name: newColorName
@@ -157,7 +150,7 @@ export default function NewPaletteForm(props) {
     setNewPaletteName(evt.target.value);
   }
   function handleSubmitSavePalette() {
-    let paletteName = 'New Test Palette',
+    let paletteName = newPaletteName,
       id = paletteName.toLowerCase().replace(/ /g, '-');
     //
     savePalette({
@@ -166,6 +159,12 @@ export default function NewPaletteForm(props) {
       colors
     });
     props.history.push('/');
+  }
+  function onDeleteClick(colorName) {
+    // alert(colorName);
+    const removedData = colors.filter(color => color.name !== colorName);
+    console.log(removedData);
+    setColors(removedData);
   }
   return (
     <div className={classes.root}>
@@ -234,7 +233,7 @@ export default function NewPaletteForm(props) {
           // initial color
           color={curColor}
           // trigger function
-          onChangeComplete={newColor => updateColor(newColor)}
+          onChangeComplete={newColor => updateCurrentColor(newColor)}
         />
 
         <ValidatorForm onSubmit={addNewColor}>
@@ -242,12 +241,19 @@ export default function NewPaletteForm(props) {
             value={newColorName}
             onChange={handleChange}
             name="newColorName"
+            // instantValidate={false}
             //
             validators={[ 'required', 'isColorNameUnique', 'isColorUnique' ]}
             errorMessages={[ 'Color Name is required', 'Color name must be unique!', 'Color already used.' ]}
           />
 
-          <Button variant="contained" color="primary" style={{ backgroundColor: curColor }} type="submit">
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ backgroundColor: curColor }}
+            type="submit"
+            value={curColor}
+          >
             {'Add Color'}
           </Button>
         </ValidatorForm>
@@ -270,7 +276,14 @@ export default function NewPaletteForm(props) {
           ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
         </Typography> */}
 
-        {colors.map((color, index) => <DraggableColorBox key={index} color={color.color} name={color.name} />)}
+        {colors.map((color, index) => (
+          <DraggableColorBox
+            key={index}
+            color={color.color}
+            name={color.name}
+            handleClick={() => onDeleteClick(color.name)}
+          />
+        ))}
       </main>
     </div>
   );
