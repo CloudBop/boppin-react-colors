@@ -1,32 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { ChromePicker } from 'react-color';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { arrayMove } from 'react-sortable-hoc';
-import DraggableColorList from './DraggableColorList';
-
 export default function PaletteFormNav(props) {
   //
-  // const { savePalette, palettes, maxColor } = props;
+  const { open, classes, palettes, handleSubmitSavePalette, handleDrawerOpen } = props;
   // const [ open, setOpen ] = React.useState(false);
+  const [ newPaletteName, setNewPaletteName ] = React.useState('');
+  // lifecycle - component did mount
+  React.useEffect(
+    () => {
+      // console.log('testing');
+      ValidatorForm.addValidationRule('isPaletteNameUnique', value => {
+        // console.log('fored! ' + value);
+        // console.log(palettes);
+        return palettes.every(({ paletteName }) => {
+          // console.log(paletteName);
+          return paletteName.toLowerCase() !== value.toLowerCase();
+        });
+      });
+    },
+    [ palettes ]
+  );
+  //
+  function handleOnChange(evt) {
+    // console.log(evt.target.value);
+    setNewPaletteName(evt.target.value);
+  }
 
   // render
   return (
     <div>
-      <CssBaPaletteseline />
+      <CssBaseline />
 
       <AppBar
         position="fixed"
@@ -48,7 +60,7 @@ export default function PaletteFormNav(props) {
           <Typography variant="h6" noWrap>
             Persistent drawer
           </Typography>
-          <ValidatorForm onSubmit={handleSubmitSavePalette}>
+          <ValidatorForm onSubmit={() => handleSubmitSavePalette(newPaletteName)}>
             <TextValidator
               label="Palette Name"
               value={newPaletteName}

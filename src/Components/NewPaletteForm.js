@@ -1,16 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ChromePicker } from 'react-color';
@@ -85,7 +80,6 @@ export default function NewPaletteForm(props) {
   const { savePalette, palettes, maxColor } = props;
   const [ open, setOpen ] = React.useState(false);
   const [ curColor, setCurrentColor ] = React.useState('teal');
-  const [ newPaletteName, setNewPaletteName ] = React.useState('');
   const [ colors, setColors ] = React.useState(palettes[0].colors);
   // new color string
   const [ newColorName, setColorName ] = React.useState('');
@@ -107,20 +101,7 @@ export default function NewPaletteForm(props) {
     },
     [ colors, curColor ]
   );
-  React.useEffect(
-    () => {
-      // console.log('testing');
-      ValidatorForm.addValidationRule('isPaletteNameUnique', value => {
-        // console.log('fored! ' + value);
-        // console.log(palettes);
-        return palettes.every(({ paletteName }) => {
-          // console.log(paletteName);
-          return paletteName.toLowerCase() !== value.toLowerCase();
-        });
-      });
-    },
-    [ palettes ]
-  );
+
   // called every re render - console.log(maxColor);
   function handleDrawerOpen() {
     setOpen(true);
@@ -146,11 +127,9 @@ export default function NewPaletteForm(props) {
   function handleChange(evt) {
     setColorName(evt.target.value);
   }
-  function handleOnChange(evt) {
-    // console.log(evt.target.value);
-    setNewPaletteName(evt.target.value);
-  }
-  function handleSubmitSavePalette() {
+
+  function handleSubmitSavePalette(newPaletteName) {
+    console.log(newPaletteName);
     let paletteName = newPaletteName,
       id = paletteName.toLowerCase().replace(/ /g, '-');
     //
@@ -182,7 +161,13 @@ export default function NewPaletteForm(props) {
   }
   return (
     <div className={classes.root}>
-      <PaletteFormNav />
+      <PaletteFormNav
+        open={open}
+        classes={classes}
+        palettes={palettes}
+        handleSubmitSavePalette={handleSubmitSavePalette}
+        handleDrawerOpen={handleDrawerOpen}
+      />
       <Drawer
         className={classes.drawer}
         variant="persistent"
