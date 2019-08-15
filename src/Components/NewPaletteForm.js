@@ -101,16 +101,12 @@ export default function NewPaletteForm(props) {
   // setColorName(evt.target.value);
   // }
 
-  function handleSubmitSavePalette(newPaletteName) {
+  function handleSubmitSavePalette(newPalette) {
     // console.log(newPaletteName);
-    let paletteName = newPaletteName,
-      id = paletteName.toLowerCase().replace(/ /g, '-');
+    newPalette.colors = colors;
+    newPalette.id = newPalette.paletteName.toLowerCase().replace(/ /g, '-');
     //
-    savePalette({
-      paletteName,
-      id,
-      colors
-    });
+    savePalette(newPalette);
     props.history.push('/');
   }
   function removeColor(colorName) {
