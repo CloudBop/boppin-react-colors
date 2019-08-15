@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
     }),
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     height: '64px'
   },
   appBarShift: {
@@ -37,6 +38,15 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
     color: 'purple'
+  },
+  navBtns: {
+    marginRight: '1rem',
+    '& a': {
+      textDecoration: 'none'
+    }
+  },
+  button: {
+    margin: '0 0.5rem'
   }
 }));
 export default function PaletteFormNav(props) {
@@ -44,7 +54,7 @@ export default function PaletteFormNav(props) {
   // const theme = useTheme();
   //
   const { open, palettes, handleSubmitSavePalette, handleDrawerOpen } = props;
-  // const [ open, setOpen ] = React.useState(false);
+  const [ formShowing, setNavDialogueOpen ] = React.useState(false);
   // lifecycle - component did mount
   React.useEffect(
     () => {
@@ -60,6 +70,15 @@ export default function PaletteFormNav(props) {
     },
     [ palettes ]
   );
+  //
+  function showForm() {
+    // console.log('dialogueOpen');
+    setNavDialogueOpen(true);
+  }
+  function hideForm() {
+    // console.log('dialogueClose');
+    setNavDialogueOpen(false);
+  }
   // render
   return (
     <div>
@@ -88,12 +107,23 @@ export default function PaletteFormNav(props) {
         </Toolbar>
 
         <div className={classes.navBtns}>
-          <PaletteMetaForm handleSubmitSavePalette={handleSubmitSavePalette} palettes={palettes} />
           <Link to="/">
-            <Button variant="contained" color="secondary">
+            <Button className={classes.button} variant="contained" color="secondary">
               Go Back
             </Button>
           </Link>
+          <Button className={classes.button} variant="contained" color="primary" onClick={showForm}>
+            Save
+          </Button>
+
+          {/*  */}
+          {formShowing && (
+            <PaletteMetaForm
+              handleSubmitSavePalette={handleSubmitSavePalette}
+              palettes={palettes}
+              dialogueClose={hideForm}
+            />
+          )}
         </div>
       </AppBar>
     </div>
