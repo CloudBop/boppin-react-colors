@@ -13,7 +13,7 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { arrayMove } from 'react-sortable-hoc';
 import DraggableColorList from './DraggableColorList';
 import PaletteFormNav from './PaletteFormNav';
-
+import ColorPickerForm from './ColorPickerForm';
 const drawerWidth = 400;
 
 const useStyles = makeStyles(theme => ({
@@ -79,28 +79,11 @@ export default function NewPaletteForm(props) {
   const theme = useTheme();
   const { savePalette, palettes, maxColor } = props;
   const [ open, setOpen ] = React.useState(false);
-  const [ curColor, setCurrentColor ] = React.useState('teal');
+  // const [ curColor, setCurrentColor ] = React.useState('teal');
   const [ colors, setColors ] = React.useState(palettes[0].colors);
   // new color string
-  const [ newColorName, setColorName ] = React.useState('');
+  // const [ newColorName, setColorName ] = React.useState('');
   const paletteIsFull = colors.length >= maxColor;
-  // lifecycle methods using hooks // same as componentDidMount
-  React.useEffect(
-    () => {
-      // searching array of object with propertiess using destructuring
-      ValidatorForm.addValidationRule('isColorNameUnique', value =>
-        colors.every(({ name }) => name.toLowerCase() !== value.toLowerCase())
-      );
-      ValidatorForm.addValidationRule('isColorUnique', newColor => {
-        // // REMEMBER THIS WAS BROKEN
-        return colors.every(({ color }) => {
-          // refer to curcolor from array
-          return color !== curColor;
-        });
-      });
-    },
-    [ colors, curColor ]
-  );
 
   // called every re render - console.log(maxColor);
   function handleDrawerOpen() {
@@ -111,22 +94,15 @@ export default function NewPaletteForm(props) {
     setOpen(false);
   }
 
-  function updateCurrentColor(color) {
-    setCurrentColor(color.hex);
-  }
-
-  function addNewColor(args) {
+  function addNewColor(newColor) {
     // console.log('2 curCol: ' + curColor);
-    const newColor = {
-      color: curColor,
-      name: newColorName
-    };
+
     setColors([ ...colors, newColor ]);
     // updateColor();
   }
-  function handleChange(evt) {
-    setColorName(evt.target.value);
-  }
+  // function handleChange(evt) {
+  // setColorName(evt.target.value);
+  // }
 
   function handleSubmitSavePalette(newPaletteName) {
     console.log(newPaletteName);
@@ -193,36 +169,7 @@ export default function NewPaletteForm(props) {
           </Button>
         </div>
 
-        <ChromePicker
-          // initial color
-          color={curColor}
-          // trigger function
-          onChangeComplete={newColor => updateCurrentColor(newColor)}
-        />
-
-        <ValidatorForm onSubmit={addNewColor}>
-          <TextValidator
-            value={newColorName}
-            onChange={handleChange}
-            name="newColorName"
-            // instantValidate={false}
-            //
-            validators={[ 'required', 'isColorNameUnique', 'isColorUnique' ]}
-            errorMessages={[ 'Color Name is required', 'Color name must be unique!', 'Color already used.' ]}
-          />
-
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ backgroundColor: curColor }}
-            type="submit"
-            value={curColor}
-            style={{ backgroundColor: paletteIsFull ? 'grey' : curColor }}
-            disabled={paletteIsFull}
-          >
-            {paletteIsFull ? 'Full Palette' : 'Add Color'}
-          </Button>
-        </ValidatorForm>
+        <ColorPickerForm colors={colors} addNewColor={addNewColor} paletteIsFull={paletteIsFull} />
       </Drawer>
       <main
         className={clsx(classes.content, {
@@ -242,7 +189,7 @@ export default function NewPaletteForm(props) {
           ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
         </Typography> */}
 
-        <DraggableColorList colors={colors} removeColor={removeColor} axis={'xy'} onSortEnd={onSortEnd} />
+        <DraggableColorList colors={colors} key removeColor={removeColor} axis={'xy'} onSortEnd={onSortEnd} />
       </main>
     </div>
   );
