@@ -1,17 +1,7 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ChromePicker } from 'react-color';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { arrayMove } from 'react-sortable-hoc';
-import DraggableColorList from './DraggableColorList';
 //
 export default function ColorPickerForm(props) {
   const { paletteIsFull, addNewColor, colors } = props;
@@ -40,7 +30,7 @@ export default function ColorPickerForm(props) {
   // lifecycle methods using hooks // same as componentDidMount
   React.useEffect(
     () => {
-      console.log('called');
+      // console.log('called');
       // searching array of object with propertiess using destructuring
       ValidatorForm.addValidationRule('isColorNameUnique', value =>
         colors.every(({ name }) => name.toLowerCase() !== value.toLowerCase())
@@ -81,7 +71,6 @@ export default function ColorPickerForm(props) {
         <Button
           variant="contained"
           color="primary"
-          style={{ backgroundColor: curColor }}
           type="submit"
           value={curColor}
           style={{ backgroundColor: paletteIsFull ? 'grey' : curColor }}

@@ -18,6 +18,7 @@ class Palette extends Component {
   changeFormat(value) {
     this.setState({ format: value });
   }
+
   render() {
     // create colorboxes
     const { colors, paletteName, emoji, id } = this.props.palette;
