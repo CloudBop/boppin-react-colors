@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PaletteMetaForm from './PaletteMetaForm';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -44,7 +45,6 @@ export default function PaletteFormNav(props) {
   //
   const { open, palettes, handleSubmitSavePalette, handleDrawerOpen } = props;
   // const [ open, setOpen ] = React.useState(false);
-  const [ newPaletteName, setNewPaletteName ] = React.useState('');
   // lifecycle - component did mount
   React.useEffect(
     () => {
@@ -60,12 +60,6 @@ export default function PaletteFormNav(props) {
     },
     [ palettes ]
   );
-  //
-  function handleOnChange(evt) {
-    // console.log(evt.target.value);
-    setNewPaletteName(evt.target.value);
-  }
-
   // render
   return (
     <div>
@@ -94,19 +88,7 @@ export default function PaletteFormNav(props) {
         </Toolbar>
 
         <div className={classes.navBtns}>
-          <ValidatorForm onSubmit={() => handleSubmitSavePalette(newPaletteName)}>
-            <TextValidator
-              label="Palette Name"
-              value={newPaletteName}
-              onChange={handleOnChange}
-              name="newPaletteName"
-              validators={[ 'required', 'isPaletteNameUnique' ]}
-              errorMessages={[ 'Enter Palette Name', ' Palette name in use.' ]}
-            />
-            <Button variant="contained" color="primary" type="submit">
-              Save Palette
-            </Button>
-          </ValidatorForm>
+          <PaletteMetaForm handleSubmitSavePalette={handleSubmitSavePalette} palettes={palettes} />
           <Link to="/">
             <Button variant="contained" color="secondary">
               Go Back
