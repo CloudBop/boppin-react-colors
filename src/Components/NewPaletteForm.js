@@ -1,18 +1,18 @@
-import React from 'react';
-import clsx from 'clsx';
-import { useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { arrayMove } from 'react-sortable-hoc';
-import DraggableColorList from './DraggableColorList';
-import PaletteFormNav from './PaletteFormNav';
 import ColorPickerForm from './ColorPickerForm';
+import Divider from '@material-ui/core/Divider';
+import DraggableColorList from './DraggableColorList';
+import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
+import PaletteFormNav from './PaletteFormNav';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { arrayMove } from 'react-sortable-hoc';
+import clsx from 'clsx';
 import useStyles from './styles/NewPaletteFormStyles';
+import { useTheme } from '@material-ui/core/styles';
 
 export default function NewPaletteForm(props) {
   const classes = useStyles();

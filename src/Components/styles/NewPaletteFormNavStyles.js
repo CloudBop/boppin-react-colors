@@ -1,9 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { DRAWER_WIDTH as drawerWidth } from '../../constants.js';
+import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(theme => ({
   root: {
     display: 'flex'
+  },
+  hide: {
+    display: 'none'
   },
   appBar: {
     transition: theme.transitions.create([ 'margin', 'width' ], {

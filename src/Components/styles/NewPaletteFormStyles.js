@@ -1,11 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { DRAWER_WIDTH as drawerWidth } from '../../constants.js';
+import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex'
-  },
-  hide: {
-    display: 'none'
   },
   drawer: {
     width: drawerWidth,
