@@ -28,7 +28,7 @@ export default makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    color: 'red'
+    color: 'rgba(0,0,0,0.6)'
   },
   navBtns: {
     marginRight: '1rem',
