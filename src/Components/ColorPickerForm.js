@@ -1,7 +1,8 @@
-import React from 'react';
 import Button from '@material-ui/core/Button';
+import React from 'react';
 import { ChromePicker } from 'react-color';
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+
 import useStyles from './styles/ColorPickerFormStyles';
 
 //
@@ -10,44 +11,40 @@ export default function ColorPickerForm(props) {
   const { paletteIsFull, addNewColor, colors } = props;
   const [ curColor, setCurrentColor ] = React.useState('teal');
   const [ newColorName, setColorName ] = React.useState('');
-
+  //
   function updateCurrentColor(color) {
     setCurrentColor(color.hex);
   }
+  //
   function handleChange(evt) {
     setColorName(evt.target.value);
   }
-
+  //
   function handleSubmit() {
     const newColor = {
       color: curColor,
       name: newColorName
     };
-    // console.log(newColor);curColorcurColor
 
     addNewColor(newColor);
     setColorName('');
-    // setCurrentColor('');
   }
-  //
-  // lifecycle methods using hooks // same as componentDidMount
+  //- lifecycle methods using hooks // similar but different to componentDidMount
   React.useEffect(
     () => {
-      // console.log('called');
-      // searching array of object with propertiess using destructuring
+      //- searching array of object with propertiess using destructuring
       ValidatorForm.addValidationRule('isColorNameUnique', value =>
         colors.every(({ name }) => name.toLowerCase() !== value.toLowerCase())
       );
       ValidatorForm.addValidationRule('isColorUnique', newColor => {
-        // // REMEMBER THIS WAS BROKEN
+        //// REMEMBER THIS WAS BROKEN
         return colors.every(({ color }) => {
-          // refer to curcolor from array arg
-          //   cons1f96f3ole.log(color + ' - ' + curColor);
+          //? state confuses this...
           return color !== curColor;
         });
       });
     },
-    // watch for changes
+    //- watch for changes: something more nuanced happening than tradition lifecycle methods
     [ colors, curColor ]
   );
 

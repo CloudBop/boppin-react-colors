@@ -17,6 +17,7 @@ class App extends Component {
     //- passed as props to NewPalette
     this.savePalette = this.savePalette.bind(this);
     this.findPalette = this.findPalette.bind(this);
+    this.deletePalette = this.deletePalette.bind(this);
   }
   //
   findPalette(id) {
@@ -30,6 +31,15 @@ class App extends Component {
     //- has to be bound - is using this keyword && needs argument
     this.setState(
       { palettes: [ ...this.state.palettes, newPalette ] },
+      //- no parens needed && not bound in constructor as  not invoked directly from handler
+      this.syncLocalStorage
+    );
+  }
+  //
+  deletePalette(id) {
+    this.setState(
+      //- filter all items that !== id
+      prevState => ({ palettes: prevState.palettes.filter(palette => palette.id !== id) }),
       //- no parens needed && not bound in constructor as  not invoked directly from handler
       this.syncLocalStorage
     );
@@ -54,7 +64,9 @@ class App extends Component {
           exact
           path="/"
           //? Routes can render() or component={SomeComponent}
-          render={routeProps => <PaletteList palettes={this.state.palettes} {...routeProps} />}
+          render={routeProps => (
+            <PaletteList palettes={this.state.palettes} deletePalette={this.deletePalette} {...routeProps} />
+          )}
         />
         <Route
           exact
