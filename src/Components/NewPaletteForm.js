@@ -1,18 +1,19 @@
 import Button from '@material-ui/core/Button';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ColorPickerForm from './ColorPickerForm';
 import Divider from '@material-ui/core/Divider';
-import DraggableColorList from './DraggableColorList';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import PaletteFormNav from './PaletteFormNav';
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import { arrayMove } from 'react-sortable-hoc';
-import clsx from 'clsx';
-import useStyles from './styles/NewPaletteFormStyles';
 import { useTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import clsx from 'clsx';
+import React from 'react';
+import { arrayMove } from 'react-sortable-hoc';
+
+import ColorPickerForm from './ColorPickerForm';
+import DraggableColorList from './DraggableColorList';
+import PaletteFormNav from './PaletteFormNav';
+import useStyles from './styles/NewPaletteFormStyles';
 
 export default function NewPaletteForm(props) {
   const classes = useStyles();
@@ -141,7 +142,14 @@ export default function NewPaletteForm(props) {
           ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
         </Typography> */}
 
-        <DraggableColorList colors={colors} removeColor={removeColor} axis={'xy'} onSortEnd={onSortEnd} />
+        <DraggableColorList
+          colors={colors}
+          removeColor={removeColor}
+          axis={'xy'}
+          onSortEnd={onSortEnd}
+          //- Distance beove evt trigger (in px) sometimes trash click will be swallowed by sortable drag (fired onMouseDown).
+          distance={20}
+        />
       </main>
     </div>
   );
