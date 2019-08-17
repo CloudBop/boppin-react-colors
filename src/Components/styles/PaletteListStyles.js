@@ -3,15 +3,25 @@ import bg from './bg.svg';
 import sizes from './sizes';
 
 export default {
+  //- unPrefixed classes, global to DOM
+  '@global': {
+    '.fade-exit': {
+      opacity: 1
+    },
+    '.fade-out': {
+      opacity: 0,
+      transition: 'opacity 500ms ease-out'
+    }
+  },
   root: {
     height: '100vh',
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'center',
     backgroundColor: '#1e8feb',
-    // background by SVGBackgrounds.com 
+    //- background by SVGBackgrounds.com
     backgroundImage: `url(${bg})`,
-    overflow:'scroll'
+    overflow: 'scroll'
   },
 
   container: {
@@ -39,7 +49,7 @@ export default {
     }
   },
 
-  heading:{
+  heading: {
     fontSize: '2rem'
   },
 
