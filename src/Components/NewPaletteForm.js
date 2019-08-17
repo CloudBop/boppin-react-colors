@@ -147,7 +147,7 @@ export default function NewPaletteForm(props) {
           removeColor={removeColor}
           axis={'xy'}
           onSortEnd={onSortEnd}
-          //- Distance beove evt trigger (in px) sometimes trash click will be swallowed by sortable drag (fired onMouseDown).
+          //- Distance befove evt trigger (in px) sometimes trash click will be swallowed by sortable drag (fired onMouseDown).
           distance={20}
         />
       </main>
