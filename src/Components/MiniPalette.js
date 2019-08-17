@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 
 import styles from './styles/MiniPaletteStyles';
 
-//
 class MiniPalette extends Component {
   constructor(props) {
     //- not refer to props in constructor
@@ -14,7 +13,6 @@ class MiniPalette extends Component {
   //
   deletePalette(e) {
     e.stopPropagation();
-    alert('hooray!');
     this.props.handleDelete(this.props.id);
   }
   //
