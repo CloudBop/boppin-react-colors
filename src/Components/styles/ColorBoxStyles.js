@@ -106,6 +106,7 @@ export default {
     transform: 'scale(0.1)',
     color: 'white',
     opacity: '0',
+    zIndex: '-5',
     '& h1': {
       fontWeight: '400',
       textShadow: '1px 2px black',

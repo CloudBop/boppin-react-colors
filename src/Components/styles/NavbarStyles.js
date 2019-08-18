@@ -36,7 +36,7 @@ export default {
     '& .rc-slider-track': {
       backgroundColor: 'transparent'
     },
-    '& .rc-slider-handle, .rc-slider-handle:active,.rc-slider-handle:focused, .rc-slider-handle:hover': {
+    '& .rc-slider-handle, .rc-slider-handle:active, .rc-slider-handle:focus, .rc-slider-handle:hover': {
       backgroundColor: 'green',
       outline: 'none',
       border: '2px solid green',
@@ -46,7 +46,7 @@ export default {
       marginLeft: '-7px',
       marginTop: '-3px; '
     },
-    [sizes.down('xs')]: {
+    [sizes.down('sm')]: {
       width: '150px'
     }
   },

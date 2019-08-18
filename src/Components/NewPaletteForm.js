@@ -126,7 +126,7 @@ export default function NewPaletteForm(props) {
       </Drawer>
       <main
         className={clsx(classes.content, {
-          // if open add content shit class
+          // if open add content shut class
           [classes.contentShift]: open
         })}
       >
