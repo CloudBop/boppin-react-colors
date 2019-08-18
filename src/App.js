@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import NewPaletteForm from './Components/NewPaletteForm';
 import Palette from './Components/Palette';
@@ -51,43 +52,63 @@ class App extends Component {
   //
   render() {
     return (
-      <Switch>
-        <Route
-          exact
-          //- path `/new` could confused with :id  | has to be above * (all)
-          path="/palette/new"
-          render={routeProps => (
-            <NewPaletteForm savePalette={this.savePalette} palettes={this.state.palettes} {...routeProps} />
-          )}
-        />
-        <Route
-          exact
-          path="/"
-          //? Routes can render() or component={SomeComponent}
-          render={routeProps => (
-            <PaletteList palettes={this.state.palettes} deletePalette={this.deletePalette} {...routeProps} />
-          )}
-        />
-        <Route
-          exact
-          path="/palette/:id"
-          render={routeProps => {
-            return <Palette palette={generatePalette(this.findPalette(routeProps.match.params.id))} />;
-          }}
-        />
-        <Route
-          exact
-          path="/palette/:paletteId/:colorId"
-          render={routeProps => (
-            <SingleColorPalette
-              palette={generatePalette(this.findPalette(routeProps.match.params.paletteId))}
-              colorId={routeProps.match.params.colorId}
-            >
-              Single Color Page
-            </SingleColorPalette>
-          )}
-        />
-      </Switch>
+      //- ENABLE ANIMATIONS ON NAVIGATION ALA OSX
+      //- wrap everything in single route render.
+      <Route
+        render={({ location }) => (
+          <TransitionGroup>
+            <CSSTransition key={location.key} classNames="fade" timeout={5000}>
+              <Switch location={location}>
+                <Route
+                  exact
+                  //- path `/new` could confused with :id  | has to be above * (all)
+                  path="/palette/new"
+                  render={routeProps => (
+                    <div className="page">
+                      <NewPaletteForm savePalette={this.savePalette} palettes={this.state.palettes} {...routeProps} />
+                    </div>
+                  )}
+                />
+                <Route
+                  exact
+                  path="/"
+                  //? Routes can render() or component={SomeComponent}
+                  render={routeProps => (
+                    <div className="page">
+                      <PaletteList palettes={this.state.palettes} deletePalette={this.deletePalette} {...routeProps} />
+                    </div>
+                  )}
+                />
+                <Route
+                  exact
+                  path="/palette/:id"
+                  render={routeProps => {
+                    return (
+                      <div className="page">
+                        <Palette palette={generatePalette(this.findPalette(routeProps.match.params.id))} />;
+                      </div>
+                    );
+                  }}
+                />
+                <Route
+                  exact
+                  path="/palette/:paletteId/:colorId"
+                  render={routeProps => (
+                    <div className="page">
+                      <SingleColorPalette
+                        palette={generatePalette(this.findPalette(routeProps.match.params.paletteId))}
+                        colorId={routeProps.match.params.colorId}
+                      >
+                        Single Color Page
+                      </SingleColorPalette>
+                    </div>
+                  )}
+                />
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup>
+        )}
+      />
     );
   }
 }
