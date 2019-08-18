@@ -55,6 +55,7 @@ export default function PaletteMetaForm(props) {
       emoji: emoji.native
     };
     handleSubmitSavePalette(newPalette);
+    setStaging('');
   }
 
   return (
@@ -81,6 +82,7 @@ export default function PaletteMetaForm(props) {
             <DialogContentText>Enter a name for your palette</DialogContentText>
 
             <TextValidator
+              autoFocus
               label="Palette Name"
               value={newPaletteName}
               onChange={handleOnChange}
